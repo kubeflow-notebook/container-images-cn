@@ -57,5 +57,5 @@ jobs:
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           build-args: |
-            BASE_IMAGE=${{ matrix.base }}
+            BASE_IMAGE=${{ matrix.base_image }}
             KUBEFLOW_VERSION=${{ matrix.kubeflow_version }}
