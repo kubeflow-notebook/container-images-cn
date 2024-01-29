@@ -8,25 +8,30 @@ USER root
 # Install system dependencies
 RUN apt-get update && \
     apt-get install -y \
+      git-lfs \
       openssh-client \
       openssh-server \
-      git-lfs
+      sudo
 
 # Install git LFS
 RUN git lfs install
-
-# Permit root login
-RUN sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config
 
 # Disable password authentication
 RUN sed -i 's/#PasswordAuthentication yes/PasswordAuthentication no/' /etc/ssh/sshd_config
 RUN sed -i 's/UsePAM yes/UsePAM no/' /etc/ssh/sshd_config
 
-RUN mkdir -p /var/run/sshd && \
-    mkdir -p /root/.ssh && \
-    touch /root/.ssh/authorized_keys && \
-    chmod 700 /root/.ssh && chmod 600 /root/.ssh/authorized_keys
+RUN mkdir -p /var/run/sshd
+
+# Make $NB_USER a sudoer
+RUN adduser $NB_USER sudo && \
+    echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
+
+USER $NB_USER
+
+RUN mkdir -p $HOME/.ssh && \
+    touch $HOME/.ssh/authorized_keys && \
+    chmod 700 $HOME/.ssh && chmod 600 $HOME/.ssh/authorized_keys
 
 EXPOSE 22
 
-CMD ["/usr/sbin/sshd", "-D"]
+CMD ["sudo", "/usr/sbin/sshd", "-D"]
