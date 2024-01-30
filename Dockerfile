@@ -27,8 +27,8 @@ RUN echo 'PermitRootLogin no' >> /etc/ssh/sshd_config
 # Enable pubkey authentication
 RUN echo 'PubkeyAuthentication yes' >> /etc/ssh/sshd_config
 
-# Disable password authentication
-RUN echo 'PasswordAuthentication no' >> /etc/ssh/sshd_config
+# Enable password authentication
+RUN echo 'PasswordAuthentication yes' >> /etc/ssh/sshd_config
 
 RUN mkdir -p /var/run/sshd
 
