@@ -11,7 +11,8 @@ RUN apt-get update && \
       git-lfs \
       openssh-client \
       openssh-server \
-      sudo
+      sudo \
+      tmux
 
 # Install git LFS
 RUN git lfs install
@@ -37,6 +38,4 @@ RUN adduser $NB_USER sudo && \
 
 USER $NB_USER
 
-EXPOSE 22
-
-CMD ["sudo", "/usr/sbin/sshd", "-D"]
+# CMD ["sudo", "/usr/sbin/sshd", "-D"]
