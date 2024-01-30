@@ -39,3 +39,5 @@ RUN echo "$NB_USER ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/$NB_USER
 
 # Switch back to the default Jupyter notebook user
 USER $NB_USER
+
+CMD ["sudo", "/usr/sbin/sshd", "-D"]
