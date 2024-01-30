@@ -3,6 +3,8 @@ version: "3"
 services:
   jupyter:
     build: .
+    volumes:
+      - ~/.ssh/id_rsa.pub:/home/jovyan/.ssh/authorized_keys:ro
     ports:
       - "22222:22"
       - "8888:8888"

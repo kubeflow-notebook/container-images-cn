@@ -16,9 +16,18 @@ RUN apt-get update && \
 # Install git LFS
 RUN git lfs install
 
+# Install Oh My Zsh
+RUN sh -c "$(wget -O- https://github.com/deluan/zsh-in-docker/releases/download/v1.1.5/zsh-in-docker.sh)" -- \
+    -t robbyrussell
+
+# Disbale root login
+RUN echo 'PermitRootLogin no' >> /etc/ssh/sshd_config
+
+# Enable pubkey authentication
+RUN echo 'PubkeyAuthentication yes' >> /etc/ssh/sshd_config
+
 # Disable password authentication
-RUN sed -i 's/#PasswordAuthentication yes/PasswordAuthentication no/' /etc/ssh/sshd_config
-RUN sed -i 's/UsePAM yes/UsePAM no/' /etc/ssh/sshd_config
+RUN echo 'PasswordAuthentication no' >> /etc/ssh/sshd_config
 
 RUN mkdir -p /var/run/sshd
 
@@ -27,10 +36,6 @@ RUN adduser $NB_USER sudo && \
     echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
 
 USER $NB_USER
-
-RUN mkdir -p $HOME/.ssh && \
-    touch $HOME/.ssh/authorized_keys && \
-    chmod 700 $HOME/.ssh && chmod 600 $HOME/.ssh/authorized_keys
 
 EXPOSE 22
 
