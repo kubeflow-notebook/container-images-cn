@@ -15,8 +15,8 @@ jobs:
     strategy:
       matrix:
         base_image:
-          - jupyter-pytorch-cuda-full
-          - jupyter-tensorflow-cuda-full
+          - ghcr.io/kubeflow-notebook/jupyter-pytorch-cuda-full
+          - ghcr.io/kubeflow-notebook/jupyter-tensorflow-cuda-full
         kubeflow_version:
           - v1.8.0
     runs-on: ubuntu-latest
@@ -44,7 +44,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@v5
         with:
-          images: ${{ env.REGISTRY }}/${{ env.REPOSITORY }}/${{ matrix.base_image }}
+          images: ${{ matrix.base_image }}-cn
           tags: |
             ${{ matrix.kubeflow_version }}
 
@@ -58,5 +58,5 @@ jobs:
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           build-args: |
-            BASE_IMAGE=kubeflownotebookswg/${{ matrix.base_image }}
+            BASE_IMAGE=${{ matrix.base_image }}
             KUBEFLOW_VERSION=${{ matrix.kubeflow_version }}
